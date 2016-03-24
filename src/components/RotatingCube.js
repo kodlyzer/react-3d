@@ -1,18 +1,74 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import React3 from 'react-three-renderer';
+import THREE from 'three';
 
-class RotatingCube extends Component {
+class RotatingCube extends React.Component {
+  constructor(props, context) {
+    super(props, context);
 
-    constructor() {
+    // construct the position vector here, because if we use 'new' within render,
+    // React will think that things have changed when they have not.
+    this.cameraPosition = new THREE.Vector3(0, 0, 5);
 
-        super();
+    this.state = {
+      cubeRotation: new THREE.Euler(),
+    };
 
-    }
+    this._onAnimate = () => {
+      // we will get this callback every frame
 
-	render() {
+      // pretend cubeRotation is immutable.
+      // this helps with updates and pure rendering.
+      // React will be sure that the rotation has now updated.
+      this.setState({
+        cubeRotation: new THREE.Euler(
+          this.state.cubeRotation.x + 0.01,
+          this.state.cubeRotation.y + 0.01,
+          0
+        ),
+      });
+    };
+  }
 
-	    return (<h1>Test</h1>);
+  render() {
+    const width = window.innerWidth; // canvas width
+    const height = window.innerHeight; // canvas height
 
-	}
+    return (<React3
+      mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
+      width={width}
+      height={height}
+
+      onAnimate={this._onAnimate}
+    >
+      <scene>
+        <perspectiveCamera
+          name="camera"
+          fov={75}
+          aspect={width / height}
+          near={1}
+          far={10000}
+
+          position={this.cameraPosition}
+        />
+        <mesh
+          rotation={this.state.cubeRotation}
+        >
+          <boxGeometry
+            width={2.5}
+            height={2.5}
+            depth={2.5}
+            widthSegments={10} 
+            heightSegments={10} 
+            depthSegments={10}
+          />
+          <meshBasicMaterial
+            color={0xfffff} wireframe={true}
+          />
+        </mesh>
+      </scene>
+    </React3>);
+  }
 }
 
 export default RotatingCube;

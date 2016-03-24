@@ -1,28 +1,11 @@
 import React, { Component } from 'react';
 import RotatingCube from './RotatingCube';
 
-class App extends Component {
+class App extends React.Component {
 
-	constructor() {
-
-        super();
-
-
-    }
-
-
-    componentDidMount() {
-
-        
-
-    }
-
-    componentWillUnmount() {
-
-    }
-
-    render() {
-        return (<RotatingCube />);
-    }
+  render() {
+    return (<RotatingCube/>)
+  }
 }
+
 export default App;
