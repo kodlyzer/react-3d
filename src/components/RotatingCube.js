@@ -1,74 +1,50 @@
 import React, { Component } from 'react';
-import React3 from 'react-three-renderer';
 import THREE from 'three';
 
 class RotatingCube extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+    constructor(props, context) {
+        super(props, context);
+    }
 
-    // construct the position vector here, because if we use 'new' within render,
-    // React will think that things have changed when they have not.
-    this.cameraPosition = new THREE.Vector3(0, 0, 5);
+    componentDidMount() {
+        var scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer();
+        var camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            1,
+            10000);
 
-    this.state = {
-      cubeRotation: new THREE.Euler(),
-    };
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        this.refs.rotatingCube.appendChild(renderer.domElement);
 
-    this._onAnimate = () => {
-      // we will get this callback every frame
+        var geometry = new THREE.BoxGeometry(
+            500,
+            500,
+            500,
+            10,
+            10,
+            10);
+        var material = new THREE.MeshBasicMaterial({
+            color: 0xfffff,
+            wireframe: true
+        });
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+        camera.position.z = 1000;
 
-      // pretend cubeRotation is immutable.
-      // this helps with updates and pure rendering.
-      // React will be sure that the rotation has now updated.
-      this.setState({
-        cubeRotation: new THREE.Euler(
-          this.state.cubeRotation.x + 0.01,
-          this.state.cubeRotation.y + 0.01,
-          0
-        ),
-      });
-    };
-  }
+        function render() {
+            requestAnimationFrame(render);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        };
+        render();
+    }
 
-  render() {
-    const width = window.innerWidth; // canvas width
-    const height = window.innerHeight; // canvas height
-
-    return (<React3
-      mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
-      width={width}
-      height={height}
-
-      onAnimate={this._onAnimate}
-    >
-      <scene>
-        <perspectiveCamera
-          name="camera"
-          fov={75}
-          aspect={width / height}
-          near={1}
-          far={10000}
-
-          position={this.cameraPosition}
-        />
-        <mesh
-          rotation={this.state.cubeRotation}
-        >
-          <boxGeometry
-            width={2.5}
-            height={2.5}
-            depth={2.5}
-            widthSegments={10} 
-            heightSegments={10} 
-            depthSegments={10}
-          />
-          <meshBasicMaterial
-            color={0xfffff} wireframe={true}
-          />
-        </mesh>
-      </scene>
-    </React3>);
-  }
+    render() {
+        return (<div ref="rotatingCube"></div>);
+    }
 }
 
 export default RotatingCube;
