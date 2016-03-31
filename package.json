@@ -1,6 +1,7 @@
 {
   "name": "react-3d",
   "version": "0.0.0",
+
   "description": "## Steps to set up the project:",
   "main": "index.js",
   "scripts": {
@@ -37,7 +38,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rana3012/react-3d.git"
+
+    "url": "https://github.com/rana3012/react-3d.git"
   },
   "bugs": {
     "url": "https://github.com/rana3012/react-3d/issues"

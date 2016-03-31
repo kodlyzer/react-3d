@@ -8,15 +8,20 @@ class RotatingCube extends React.Component {
 
     componentDidMount() {
         var scene = new THREE.Scene();
+
         var renderer = new THREE.WebGLRenderer({antialias:true});
         var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,10000);
 
         renderer.setSize(200,200);
+
+
         renderer.setClearColor( 0xffffff, 1);
 
         this.refs.rotatingCube.appendChild(renderer.domElement);
         
-        var geometry = new THREE.BoxGeometry(400,400,400);
+
+        var geometry = new THREE.BoxGeometry(500,500,500);
+
         var texture1 = THREE.ImageUtils.loadTexture('./src/assets/images/1.jpg');
         texture1.anisotropy = renderer.getMaxAnisotropy();
         var texture2 = THREE.ImageUtils.loadTexture('./src/assets/images/2.png');
@@ -52,7 +57,8 @@ class RotatingCube extends React.Component {
         ]);
         var cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
-        camera.position.z = 1000;
+
+        camera.position.z = 1200;
 
         function render() {
             requestAnimationFrame(render);
